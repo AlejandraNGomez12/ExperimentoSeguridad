@@ -2,11 +2,9 @@ from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemySchema
 from .Permiso import db
 
-
 class Opciones(db.Model):
     id = db.Column(db.Integer, db.ForeignKey("usuario.id"), primary_key=True)
-    nombre = db.Column(db.String(50))
-    
+    nombre = db.Column(db.String(50))    
 
 class Permiso(db.Model):
     usuarioId = db.relationship(
