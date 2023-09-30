@@ -1,17 +1,18 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemySchema
-from .Rol import Rol
-from .Base import db
+from .Usuario import db
 
 
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     usuario = db.Column(db.String(50))
     contrasena = db.Column(db.String(50))
-    rol_id = db.Column(db.Integer, db.ForeignKey("rol.id"))
-    
+    admin = db.Column(db.Boolean)
+    activo = db.Column(db.Boolean)
+
+
     def dar_atributos(self):
-        return {"id": self.id, "usuario": self.usuario, "rol": self.rol.value}
+        return {"id": self.id, "usuario": self.usuario, "admin": self.admin.value, "activo": self.activo.value}
 
 
 class UsuarioSchema(SQLAlchemySchema):
@@ -22,4 +23,3 @@ class UsuarioSchema(SQLAlchemySchema):
 
     id = fields.Integer()
     usuario = fields.String()
-    rol = fields.Function(lambda obj: obj.rol.value)

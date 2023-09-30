@@ -1,18 +1,20 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from .Rol import Rol
-from .Base import db
-from .Usuario import Usuario
+from .Empresa import db
 
 
-class Admin(Usuario):
+class Empresa():
     id = db.Column(db.Integer, db.ForeignKey("usuario.id"), primary_key=True)
+    nit = db.Column(db.String(50))
     nombre = db.Column(db.String(50))
+    usuarioCreacion = db.Column(db.number)
+    fechaCreacion = db.Column(db.DateTime)
+    
 
     
-class AdminSchema(SQLAlchemyAutoSchema):
+class EmpresaSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = Admin
+        model = Empresa
         include_relationships = True
         load_instance = True
 

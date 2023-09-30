@@ -13,6 +13,7 @@ from modelos import (
     
 )
 
+from vistas.VistaEmpresa import VistaEmpresa
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dbapp.sqlite"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -26,7 +27,9 @@ db.init_app(app)
 db.create_all()
 cors = CORS(app)
 
+
 api = Api(app)
+api.add_resource(VistaEmpresa, "/empresa")
 
 
 

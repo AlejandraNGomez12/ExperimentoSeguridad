@@ -1,15 +1,17 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemySchema
-from .Rol import Rol
-from .Base import db
-from .Usuario import Usuario
+from .Candidato import db
 
 
-class Candidato(Usuario):
+
+class Candidato():
     id = db.Column(db.Integer, db.ForeignKey("usuario.id"), primary_key=True)
+    usuarioCreacion = db.Column(db.number)
+    fechaCreacion = db.Column(db.DateTime)
+    documento = db.Column(db.String(50))
     nombre = db.Column(db.String(50))
+    fechaNacimiento = db.Column(db.Date)
     
-
 class CandidatoSchema(SQLAlchemySchema):
     class Meta:
         model = Candidato
@@ -17,6 +19,9 @@ class CandidatoSchema(SQLAlchemySchema):
         load_instance = True
 
     id = fields.Integer()
-    usuario = fields.String()
+    usuarioCreacion = fields.Number
+    fechaCreacion = fields.DateTime
+    documento = fields.String()
     nombre = fields.String()
+    fechaNacimiento = fields.Date
 
