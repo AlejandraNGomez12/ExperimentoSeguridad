@@ -21,3 +21,5 @@ api.add_resource(VistaLogIn, "/login")
 
 jwt =JWTManager(app)
 
+
+
