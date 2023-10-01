@@ -89,7 +89,7 @@ flask run -p 5003
     "nombre": "crearEmpresa"
 }
 ```
- Opciones a crear: Manual en la BD
+ Opciones a crear: 
    1. crearCandidato
    2. verCandidato
    3. editarCandidato
