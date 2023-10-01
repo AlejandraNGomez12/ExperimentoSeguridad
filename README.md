@@ -99,10 +99,19 @@ flask run -p 5003
    7. editarEmpresa
    8. verEmpresa
 
-10. finalmente para que un usuario tenga premisos es necesario crear el permiso con un idUsuario o idCandidato y las opciones
 
+10. Finalmente para que un usuario tenga premisos es necesario crear el permiso con un idUsuario o idCandidato y las opciones: 
+ enpoint --> http://127.0.0.1:5002/permisos
+   metodo: POST
+```shell
+{
+    "usuarioId":"1",
+    "opcionId":"5"
+}
+```
+Si el usuario es un usuario administrador podrá acceder a cualquier opción sin necesidad de tener un permiso creado y el admin será el unico con el privilegio de crear una nueva opción y un nuevo permiso.
 
-NOTA: Es de aclara que todos los microservicios de Empresa, Candidato, Permiso y Opciones se debe hacer uso del Token de seguridad de la siguiente forma:
+NOTA: Es de aclara que todos los microservicios de Empresa, Candidato, Permiso y Opciones se debe hacer uso del Token de seguridad que es generado una vez se haga el login a la aplicación con un usuario y contraseña validos de la siguiente forma:
 ![image](https://github.com/AlejandraNGomez12/ExperimentoSeguridad/assets/123474214/dfc20b3c-3a60-4713-912e-fe5e19d27954)
 
 
