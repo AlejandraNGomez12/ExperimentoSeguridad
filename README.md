@@ -89,15 +89,15 @@ flask run -p 5003
     "nombre": "crearEmpresa"
 }
 ```
- Opciones a crear:
-   1- crearCandidato     		
-   2- verCandidato				
-   3- editarCandidato	
-   4- verCandidatos		
-   5- crearEmpresa		
-   6- verEmpresa				
-   7- editarEmpresa		
-   8- verEmpresa
+ Opciones a crear: Manual en la BD
+   1. crearCandidato
+   2. verCandidato
+   3. editarCandidato
+   4. verCandidatos
+   5. crearEmpresa
+   6. verEmpresa
+   7. editarEmpresa
+   8. verEmpresa
 
 10. finalmente para que un usuario tenga premisos es necesario crear el permiso con un idUsuario o idCandidato y las opciones
 
