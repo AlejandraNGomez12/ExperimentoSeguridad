@@ -1,25 +1,12 @@
-from flask import Flask
+from MicroservicioUsuario import create_app
+from flask_restful import Resource, Api
+from flask import Flask, request
 from flask_cors import CORS
-from flask_restful import Api
-from modelos import (
-    Admin,
-    Candidato,
-    Rol,
-    Usuario,
-    Empresa,
-    db,
-    Permiso,
-    RolPermisos,
-    
-)
+from flask_jwt_extended import JWTManager
+from .modelos import (db) 
+from .vistas import VistaUsuario, VistaLogIn
 
-from vistas.VistaEmpresa import VistaEmpresa
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dbapp.sqlite"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["JWT_SECRET_KEY"] = "frase-secreta"
-app.config["PROPAGATE_EXCEPTIONS"] = True
-
+app = create_app('default')  
 app_context = app.app_context()
 app_context.push()
 
@@ -29,7 +16,8 @@ cors = CORS(app)
 
 
 api = Api(app)
-api.add_resource(VistaEmpresa, "/empresa")
+api.add_resource(VistaUsuario, "/usuario")
+api.add_resource(VistaLogIn, "/login")
 
-
+jwt =JWTManager(app)
 
