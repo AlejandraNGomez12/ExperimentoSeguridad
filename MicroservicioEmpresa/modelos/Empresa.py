@@ -1,13 +1,15 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from .Empresa import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 
-class Empresa():
-    id = db.Column(db.Integer, db.ForeignKey("usuario.id"), primary_key=True)
+class Empresa(db.Model):
+    id = db.Column(db.Integer,  primary_key=True)
     nit = db.Column(db.String(50))
     nombre = db.Column(db.String(50))
-    usuarioCreacion = db.Column(db.number)
+    usuarioCreacion = db.Column(db.Numeric)
     fechaCreacion = db.Column(db.DateTime)
     
 
@@ -19,3 +21,8 @@ class EmpresaSchema(SQLAlchemyAutoSchema):
         load_instance = True
 
     id = fields.String()
+    nit = fields.String()
+    nombre = fields.String()
+    usuarioCreacion = fields.Number()
+    fechaCreacion = fields.DateTime()
+    

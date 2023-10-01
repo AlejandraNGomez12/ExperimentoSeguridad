@@ -1,19 +1,16 @@
+
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
-from modelos import (
-    Admin,
-    Candidato,
-    Rol,
-    Usuario,
-    Empresa,
-    db,
-    Permiso,
-    RolPermisos,
-    
-)
+from flask_jwt_extended import JWTManager
 
-from vistas.VistaEmpresa import VistaEmpresa
+from modelos import (
+    Candidato,
+    db
+)
+from vistas.VistaCandidato import VistaCandidato
+from vistas.VistaCandidatos import VistaCandidatos
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dbapp.sqlite"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -29,7 +26,8 @@ cors = CORS(app)
 
 
 api = Api(app)
-api.add_resource(VistaEmpresa, "/empresa")
+api.add_resource(VistaCandidatos, "/candidatos")
+api.add_resource(VistaCandidato, "/candidato/<int:id_candidato>")
 
 
-
+jwt =JWTManager(app)

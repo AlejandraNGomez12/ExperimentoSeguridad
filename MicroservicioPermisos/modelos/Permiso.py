@@ -1,21 +1,14 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemySchema
-from .Permiso import db
+from flask_sqlalchemy import SQLAlchemy
 
-
-class Opciones(db.Model):
-    id = db.Column(db.Integer, db.ForeignKey("usuario.id"), primary_key=True)
-    nombre = db.Column(db.String(50))
-    
+db = SQLAlchemy()
 
 class Permiso(db.Model):
-    usuarioId = db.relationship(
-        "Usuario", cascade="all, delete, delete-orphan"
-    )
-    opcionId = db.relationship(
-        "Opciones", cascade="all, delete, delete-orphan"
-    )
-    usuarioCreacion = db.Column(db.number)
+    id = db.Column(db.Integer, primary_key=True)
+    usuarioId = db.Column(db.String)
+    opcionId = db.Column(db.Integer, db.ForeignKey("opciones.id"))
+    usuarioCreacion = db.Column(db.String)
     fechaCreacion = db.Column(db.DateTime)
     
 
@@ -26,8 +19,9 @@ class PermisoSchema(SQLAlchemySchema):
         include_fk = True
         load_instance = True
 
+    id  = fields.String()
     usuarioId = fields.String()
     opcionId = fields.String()
-    usuarioCreacion = fields.Number
-    fechaCreacion = fields.DateTime
+    usuarioCreacion = fields.String()
+    fechaCreacion = fields.DateTime()
    

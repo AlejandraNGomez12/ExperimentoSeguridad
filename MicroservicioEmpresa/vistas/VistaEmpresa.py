@@ -1,38 +1,24 @@
-import hashlib
 from flask import jsonify, request
 from flask_restful import Resource
+from flask_jwt_extended import current_user, jwt_required
 
-from modelos import Empresa, db
-from .VistaBase import empresa_schema
+from modelos import Empresa,EmpresaSchema,db
+from datetime import datetime
 
+empresa_schema = EmpresaSchema()
 
 class VistaEmpresa(Resource):
 
     def get(self, id_empresa):
-        return empresa_schema.dump(Empresa.query.get_or_404(id_empresa))
+       return empresa_schema.dump(Empresa.query.get_or_404(id_empresa))
 
-    def get(self):
-        return [empresa_schema.dump(empresa) for empresa in empresas]
-
-    def post(self):
-        nueva_empresa = Empresa(
-            nombre=request.json["nombre"],
-            actividad=request.json["actividad"],
-            numEmpleados=request.json["numEmpleados"]
-        )
-
-        db.session.add(nueva_empresa)
-        db.session.commit()
-        return empresa_schema.dump(nueva_empresa)
     
     def put(self, id_empresa):
         empresa = Empresa.query.get_or_404(id_empresa)
+        empresa.nit = request.json["nit"]
         empresa.nombre = request.json["nombre"]
-        empresa.actividad = request.json["actividad"]
-        empresa.numEmpleados = request.json["numEmpleados"]
 
         db.session.commit()
         return empresa_schema.dump(empresa)
-
 
 
