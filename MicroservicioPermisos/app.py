@@ -1,25 +1,15 @@
-from flask import Flask
+from MicroservicioPermisos import create_app
+
+from MicroservicioUsuario import modelos
+
+from flask_restful import Resource, Api
 from flask_cors import CORS
-from flask_restful import Api
-from modelos import (
-    db,
-    Permiso, 
-    Opciones
-)
+from flask_jwt_extended import JWTManager
+from .modelos import (db)
 
-from vistas.VistaPermiso import VistaPermiso
-from vistas.VistaPermisos import VistaPermisos
-from vistas.VistaOpcion import VistaOpcion
-from vistas.VistaOpciones import VistaOpciones
+from .vistas import VistaPermiso,VistaPermisos,VistaOpcion,VistaOpciones
 
-
-
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\Users\\aleja\\Documents\\Maestria\\ArquitecturaAgil\\ProyectoSeguridad\\ExperimentoSeguridad\\instance\\dbapp.sqlite"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["JWT_SECRET_KEY"] = "frase-secreta"
-app.config["PROPAGATE_EXCEPTIONS"] = True
-
+app = create_app('default')  
 app_context = app.app_context()
 app_context.push()
 
@@ -34,5 +24,24 @@ api.add_resource(VistaPermisos, "/permisos")
 api.add_resource(VistaOpcion, "/opcion/<int:id_opcion>")
 api.add_resource(VistaOpciones, "/opciones")
 
+jwt =JWTManager(app)
 
+
+@jwt.user_lookup_loader
+def _user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    user = db.session.query(modelos.Usuario).filter_by(id=identity).one_or_none()
+    print('user')
+    print(user.id)
+    if user is not None:
+        if user.activo:
+            return {
+                "id": user.id,
+                "admin": user.admin,
+                "activo": user.activo
+            }
+            
+    return None
+
+    
 

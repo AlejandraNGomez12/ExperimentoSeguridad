@@ -3,7 +3,8 @@ from flask import jsonify, request
 from flask_restful import Resource
 import requests
 
-from modelos import Permiso,PermisoSchema,db
+from ..modelos import Permiso,PermisoSchema,Opciones,db
+from MicroservicioUsuario import modelos
 from flask_jwt_extended import current_user, jwt_required
 from datetime import datetime
 
@@ -11,38 +12,35 @@ permiso_schema = PermisoSchema()
 
 class VistaPermisos(Resource):
 
+    @jwt_required()
     def get(self):
         return permiso_schema.dump(db.session.query(Permiso).all())
 
+    @jwt_required()
     def post(self):
-        if(int(request.json["usuarioId"])== None):
+        
+        if(current_user['admin'] == False):
+            return 'No tiene el permiso para crear un permiso'
+        
+        if(request.json["usuarioId"]== None):
             return "error"
         
-        if(int(request.json["opcionId"])== None):
+        if(request.json["opcionId"]== None):
             return "error"
-        
-        ##try:
-        ##    content = requests.get('http://127.0.0.1:5001/usuario/'+int(request.json["usuarioId"]))
-        ##    estado = content.status_code
-            
-        ##except requests.exceptions.RequestException as e:
-        ##    estado = 'Error'
-        
-        try:
-            id = (request.json["opcionId"])
-            content = requests.get('http://127.0.0.1:5000/opcion/'+id)
-            estado = content.status_code
-            
-        except requests.exceptions.RequestException as e:
-            estado = 'Error'
-        
-        if(estado!=200):
-            return 'No existe'
+        print(request.json["opcionId"])
+        print(request.json["usuarioId"])
+        usuario = db.session.query(modelos.Usuario).filter_by(id = request.json["usuarioId"]).first()
+        opcion = db.session.query(Opciones).filter_by(id = request.json["opcionId"]).first()
 
+        if( usuario == None):
+            return "no existe el id de usuario"
+        if( opcion == None):
+            return "no existe el id de opcion"
+        
         nueva_permiso = Permiso(
-            usuarioId = request.json["usuarioId"],
-            opcionId =  request.json["opcionId"],
-            usuarioCreacion = current_user["id"], ##request.json["usuarioCreacion"],
+            usuarioId = usuario.id,
+            opcionId = opcion.id,
+            usuarioCreacion = current_user["id"],
             fechaCreacion =  datetime.now()
         )
 
